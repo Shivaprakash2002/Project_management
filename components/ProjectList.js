@@ -2,11 +2,11 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import io from 'socket.io-client';
+import { io } from 'socket.io-client';
 import { toast } from 'react-toastify';
 import Notification from './Notification';
 
-const socket = io('http://localhost:5000');
+const socket = io('http://localhost:5000', { transports: ['websocket'] });
 
 export default function ProjectList() {
   const [projects, setProjects] = useState([]);
@@ -17,42 +17,46 @@ export default function ProjectList() {
 
   useEffect(() => {
     fetchProjects();
+  
     const userId = localStorage.getItem('userId');
-    console.log('Received notifications:', userId); // Add this
-
+  
+    if (!userId) {
+      console.warn('No userId found in localStorage!');
+      return; // Prevent socket from emitting with undefined
+    }
+  
     socket.emit('join', { userId });
-
+  
     socket.on('projectCreated', (project) => {
       setProjects((prev) => [...prev, project]);
       toast.info(`Project ${project.name} created`);
     });
-
+  
     socket.on('projectUpdated', (project) => {
       setProjects((prev) =>
         prev.map((p) => (p.id === project.id ? project : p))
       );
       toast.info(`Project ${project.name} updated`);
     });
-
+  
     socket.on('projectDeleted', ({ id }) => {
       setProjects((prev) => prev.filter((p) => p.id !== id));
       toast.info('Project deleted');
     });
-
+  
     socket.on('notifications', (notifs) => {
-      console.log('Received notifications:', notifs); // Add this
+      console.log('Received notifications:', notifs);
       setNotifications(notifs);
     });
-    
-
+  
     return () => {
       socket.off('projectCreated');
       socket.off('projectUpdated');
       socket.off('projectDeleted');
       socket.off('notifications');
-      socket.disconnect();
     };
-}, []);
+  }, []);
+  
 
   const fetchProjects = async () => {
     try {
@@ -88,7 +92,7 @@ export default function ProjectList() {
     
     // Redirect to login page
     toast.info('Logged out successfully');
-    router.push('/login');
+    router.push('/auth/sign-in');
   };
 
   return (

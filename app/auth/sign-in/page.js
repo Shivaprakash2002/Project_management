@@ -21,6 +21,8 @@ export default function Login() {
         password,
         role,
       });
+
+      console.log('Login response:', response); // Debugging line
       
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('role', response.data.role);
@@ -89,7 +91,7 @@ export default function Login() {
         <div className="mt-4 text-center">
           <p className="text-gray-600">
             Don't have an account?{' '}
-            <a href="/signup" className="text-blue-500 hover:underline">
+            <a href="/auth/signup" className="text-blue-500 hover:underline">
               Sign up
             </a>
           </p>
