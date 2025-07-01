@@ -16,7 +16,7 @@ export default function ProjectForm({ id }) {
 
   const fetchProject = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/projects/${id}`, {
+      const response = await axios.get(`{process.env.REACT_APP_API_URL}/api/projects/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       setName(response.data.name);
@@ -36,13 +36,13 @@ export default function ProjectForm({ id }) {
     try {
       if (id && id !== 'new') {
         await axios.put(
-          `http://localhost:5000/api/projects/${id}`,
+          `{process.env.REACT_APP_API_URL}/api/projects/${id}`,
           { name, description },
           { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
         );
       } else {
         await axios.post(
-          'http://localhost:5000/api/projects',
+          `{process.env.REACT_APP_API_URL}/api/projects`,
           { name, description },
           { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
         );
