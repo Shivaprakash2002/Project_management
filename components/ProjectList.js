@@ -6,7 +6,7 @@ import { io } from 'socket.io-client';
 import { toast } from 'react-toastify';
 import Notification from './Notification';
 
-const socket = io(process.env.REACT_APP_API_URL, { 
+const socket = io(process.env.NEXT_PUBLIC_API_URL, { 
   transports: ['websocket', 'polling'] 
 });
 
@@ -62,7 +62,7 @@ export default function ProjectList() {
 
   const fetchProjects = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/projects?search=${search}`, {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/projects?search=${search}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       setProjects(response.data);
@@ -73,7 +73,7 @@ export default function ProjectList() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`${process.env.REACT_APP_API_URL}/api/projects/${id}`, {
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/projects/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       // The socket event will handle the removal from the list

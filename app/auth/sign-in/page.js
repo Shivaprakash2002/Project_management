@@ -14,9 +14,11 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+
+    console.log('process.env.NEXT_PUBLIC_API_URL',`${process.env.NEXT_PUBLIC_API_URL}`);
     
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`, {
         username,
         password,
         role,

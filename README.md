@@ -89,7 +89,7 @@ src/components/ProjectList.js
 src/components/ProjectForm.js
 
 
-For local testing:const response = await axios.post('${process.env.REACT_APP_API_URL}/api/auth/login', { ... });
+For local testing:const response = await axios.post('${process.env.NEXT_PUBLIC_API_URL}/api/auth/login', { ... });
 const socket = io('http://localhost:5000');
 
 
